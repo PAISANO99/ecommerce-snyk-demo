@@ -45,7 +45,7 @@ stages:
             displayName: 'Run Server Linter'
 
           - script: |
-              npx vitest run --reporter=junit --reporter=cobertura --outputFile.junit=server-test-results.xml --outputFile.cobertura=coverage/cobertura-coverage.xml --coverage
+              npx vitest run --reporter=junit --outputFile=server-test-results.xml --coverage --coverage.reporter=cobertura --coverage.reporter=text
             workingDirectory: 'server'
             displayName: 'Run Server Unit/Integration Tests & Coverage'
             continueOnError: false
@@ -99,7 +99,7 @@ stages:
             displayName: 'Run TypeScript Type Check'
 
           - script: |
-              npx vitest run --reporter=junit --reporter=cobertura --outputFile.junit=client-test-results.xml --outputFile.cobertura=coverage/cobertura-coverage.xml --coverage
+              npx vitest run --reporter=junit --outputFile=client-test-results.xml --coverage --coverage.reporter=cobertura --coverage.reporter=text
             workingDirectory: 'client'
             displayName: 'Run Client Tests & Coverage'
             continueOnError: false
