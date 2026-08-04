@@ -1,0 +1,108 @@
+# Azure DevOps Pipeline definition for E-Commerce Web Application
+# This pipeline automates CI/CD, tests, code quality checks, and publishes metrics for Azure DevOps Dashboards.
+
+trigger:
+  branches:
+    include:
+      - main
+      - master
+      - develop
+
+pr:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: BuildAndTest
+    displayName: 'Build, Lint and Test Stage'
+    jobs:
+      - job: ServerQuality
+        displayName: 'Server CI & Quality Metrics'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js 20.x'
+
+          - script: |
+              npm ci
+            workingDirectory: 'server'
+            displayName: 'Install Server Dependencies'
+
+          - script: |
+              npx prisma generate
+            workingDirectory: 'server'
+            displayName: 'Generate Prisma Client'
+
+          - script: |
+              npm run lint
+            workingDirectory: 'server'
+            displayName: 'Run Server Linter'
+
+          - script: |
+              npx vitest run --reporter=junit --outputFile=server-test-results.xml --coverage
+            workingDirectory: 'server'
+            displayName: 'Run Server Tests & Coverage'
+            continueOnError: false
+
+          - task: PublishTestResults@2
+            condition: always()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'server/server-test-results.xml'
+              failTaskOnFailedTests: true
+              testRunTitle: 'Server Integration & Unit Tests'
+            displayName: 'Publish Server Test Metrics'
+
+          - script: |
+              npm run build
+            workingDirectory: 'server'
+            displayName: 'Build Server Application'
+
+      - job: ClientQuality
+        displayName: 'Client CI & Quality Metrics'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js 20.x'
+
+          - script: |
+              npm ci
+            workingDirectory: 'client'
+            displayName: 'Install Client Dependencies'
+
+          - script: |
+              npm run lint
+            workingDirectory: 'client'
+            displayName: 'Run Client Linter'
+
+          - script: |
+              npm run typecheck
+            workingDirectory: 'client'
+            displayName: 'Run TypeScript Type Check'
+
+          - script: |
+              npx vitest run --reporter=junit --outputFile=client-test-results.xml --coverage
+            workingDirectory: 'client'
+            displayName: 'Run Client Tests & Coverage'
+            continueOnError: false
+
+          - task: PublishTestResults@2
+            condition: always()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'client/client-test-results.xml'
+              failTaskOnFailedTests: true
+              testRunTitle: 'Client Unit & Component Tests'
+            displayName: 'Publish Client Test Metrics'
+
+          - script: |
+              npm run build
+            workingDirectory: 'client'
+            displayName: 'Build Client Bundle'

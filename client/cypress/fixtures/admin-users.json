@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Javier Gómez",
+      "email": "javier@vibepulse.com",
+      "role": "ADMIN",
+      "createdAt": "2026-04-01T08:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "María Torres",
+      "email": "maria@vibepulse.com",
+      "role": "CLIENT",
+      "createdAt": "2026-04-12T10:30:00.000Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 24,
+    "total": 2,
+    "totalPages": 1
+  }
+}

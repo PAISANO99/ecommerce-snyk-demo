@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 101,
+      "name": "Hoodie Pulse",
+      "description": "Buzo premium oversize",
+      "price": 149900,
+      "comparePrice": 179900,
+      "imageUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700&q=80",
+      "stock": 8,
+      "featured": true,
+      "badge": "Nuevo",
+      "categoryId": 1,
+      "category": {
+        "id": 1,
+        "name": "Remeras",
+        "slug": "remeras"
+      },
+      "createdAt": "2026-04-27T10:00:00.000Z"
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "limit": 12,
+  "totalPages": 1
+}

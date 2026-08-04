@@ -1,0 +1,41 @@
+# dependencias / node_modules
+node_modules/
+/client/node_modules/
+/server/node_modules/
+
+# variables de entorno locales
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# builds / compilados
+dist/
+dist-ssr/
+build/
+/client/dist/
+/server/dist/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# prisma locales
+/prisma/data.db
+/prisma/data.db-journal
+
+# misc
+.DS_Store
+.vscode/
+*.tsbuildinfo
+
+# logs locales de depuracion
+.logs/
+*.log
+
+# artefactos de Cypress
+/client/cypress/downloads/
+/client/cypress/screenshots/
+/client/cypress/videos/

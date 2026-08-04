@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Remeras",
+    "slug": "remeras",
+    "description": "Remeras urbanas",
+    "productCount": 8
+  },
+  {
+    "id": 2,
+    "name": "Pantalones",
+    "slug": "pantalones",
+    "description": "Pantalones streetwear",
+    "productCount": 5
+  }
+]

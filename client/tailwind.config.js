@@ -1,0 +1,62 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'sans-serif'],
+        headline: ['Manrope', 'sans-serif'],
+      },
+      colors: {
+        'admin-surface': '#111125',
+        'admin-surface-container': '#1e1e32',
+        'admin-surface-low': '#1a1a2e',
+        'admin-surface-high': '#28283d',
+        'admin-surface-highest': '#333348',
+        'admin-surface-lowest': '#0c0c1f',
+        'admin-primary': '#bac3ff',
+        'admin-primary-container': '#4361ee',
+        'admin-on-primary': '#00218d',
+        'admin-secondary': '#bbc5eb',
+        'admin-secondary-container': '#3b4665',
+        'admin-tertiary': '#ffb692',
+        'admin-tertiary-container': '#ba4e00',
+        'admin-error': '#ffb4ab',
+        'admin-error-container': '#93000a',
+        'admin-outline': '#8e8fa1',
+        'admin-outline-variant': '#444655',
+        'admin-on-surface': '#e2e0fc',
+        'admin-on-surface-variant': '#c4c5d7',
+        brand: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#4f6ef7',
+          600: '#3f5de6',
+          700: '#334bc2',
+        },
+        ink: {
+          500: '#667085',
+          700: '#475467',
+          900: '#101828',
+        },
+        line: '#e6e4f5',
+        shell: '#f8f7ff',
+        success: '#12b76a',
+        danger: '#ff2e63',
+      },
+      boxShadow: {
+        soft: '0 18px 50px rgba(17, 24, 39, 0.08)',
+        admin: '0 28px 80px rgba(0, 0, 0, 0.32)',
+        'admin-glow': '0 16px 40px rgba(67, 97, 238, 0.18)',
+      },
+    },
+  },
+  plugins: [],
+}
