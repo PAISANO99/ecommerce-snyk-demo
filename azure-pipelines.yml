@@ -1,5 +1,5 @@
 # Azure DevOps Pipeline definition for E-Commerce Web Application
-# This pipeline automates CI/CD, tests, code quality checks, and publishes metrics for Azure DevOps Dashboards.
+# This pipeline automates CI/CD, Performance Testing, Code Coverage, and Quality Metrics.
 
 trigger:
   branches:
@@ -19,10 +19,10 @@ pool:
 
 stages:
   - stage: BuildAndTest
-    displayName: 'Build, Lint and Test Stage'
+    displayName: 'Build, Quality & Performance Stage'
     jobs:
       - job: ServerQuality
-        displayName: 'Server CI & Quality Metrics'
+        displayName: 'Server Quality & Performance Metrics'
         steps:
           - task: NodeTool@0
             inputs:
@@ -45,10 +45,15 @@ stages:
             displayName: 'Run Server Linter'
 
           - script: |
-              npx vitest run --reporter=junit --outputFile=server-test-results.xml --coverage
+              npx vitest run --reporter=junit --reporter=cobertura --outputFile.junit=server-test-results.xml --outputFile.cobertura=coverage/cobertura-coverage.xml --coverage
             workingDirectory: 'server'
-            displayName: 'Run Server Tests & Coverage'
+            displayName: 'Run Server Unit/Integration Tests & Coverage'
             continueOnError: false
+
+          - script: |
+              npm run test:load
+            workingDirectory: 'server'
+            displayName: 'Run Server Load & Performance Benchmark (Autocannon)'
 
           - task: PublishTestResults@2
             condition: always()
@@ -56,8 +61,14 @@ stages:
               testResultsFormat: 'JUnit'
               testResultsFiles: 'server/server-test-results.xml'
               failTaskOnFailedTests: true
-              testRunTitle: 'Server Integration & Unit Tests'
+              testRunTitle: 'Server Integration, Unit & Performance Tests'
             displayName: 'Publish Server Test Metrics'
+
+          - task: PublishCodeCoverageResults@2
+            condition: always()
+            inputs:
+              summaryFileLocation: 'server/coverage/cobertura-coverage.xml'
+            displayName: 'Publish Server Code Coverage'
 
           - script: |
               npm run build
@@ -65,7 +76,7 @@ stages:
             displayName: 'Build Server Application'
 
       - job: ClientQuality
-        displayName: 'Client CI & Quality Metrics'
+        displayName: 'Client Quality & Coverage Metrics'
         steps:
           - task: NodeTool@0
             inputs:
@@ -88,7 +99,7 @@ stages:
             displayName: 'Run TypeScript Type Check'
 
           - script: |
-              npx vitest run --reporter=junit --outputFile=client-test-results.xml --coverage
+              npx vitest run --reporter=junit --reporter=cobertura --outputFile.junit=client-test-results.xml --outputFile.cobertura=coverage/cobertura-coverage.xml --coverage
             workingDirectory: 'client'
             displayName: 'Run Client Tests & Coverage'
             continueOnError: false
@@ -101,6 +112,12 @@ stages:
               failTaskOnFailedTests: true
               testRunTitle: 'Client Unit & Component Tests'
             displayName: 'Publish Client Test Metrics'
+
+          - task: PublishCodeCoverageResults@2
+            condition: always()
+            inputs:
+              summaryFileLocation: 'client/coverage/cobertura-coverage.xml'
+            displayName: 'Publish Client Code Coverage'
 
           - script: |
               npm run build
