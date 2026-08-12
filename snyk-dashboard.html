@@ -76,12 +76,6 @@
       border-color: rgba(99, 102, 241, 0.4);
     }
 
-    .glow-critical { box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); }
-    .glow-high { box-shadow: 0 0 20px rgba(249, 115, 22, 0.25); }
-    .glow-medium { box-shadow: 0 0 20px rgba(234, 179, 8, 0.2); }
-    .glow-low { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
-    .glow-purple { box-shadow: 0 0 25px rgba(139, 92, 246, 0.3); }
-
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -184,7 +178,7 @@
           <span class="text-3xl font-extrabold text-white">139</span>
           <span class="text-xs text-emerald-400">100% Licencias OK</span>
         </div>
-        <p class="mt-2 text-[11px] text-slate-400">Cliente (Vite/React) + Servidor (Express)</p>
+        <p class="mt-2 text-[11px] text-slate-400">53 hallazgos en paquetes de terceros</p>
       </div>
 
       <!-- Base Image Container Risk -->
@@ -229,7 +223,7 @@
             <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-400"></i>
             Distribución por Severidad
           </h2>
-          <span class="text-xs text-slate-400">Total: 53 Hallazgos</span>
+          <span class="text-xs text-slate-400">Total: 87 Hallazgos</span>
         </div>
         <div class="relative flex items-center justify-center my-4 h-64">
           <canvas id="severityChart"></canvas>
@@ -237,19 +231,19 @@
         <div class="grid grid-cols-2 gap-2 text-xs pt-4 border-t border-slate-800">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-red-500"></span>
-            <span class="text-slate-300">Crítico: <strong>3</strong> (5.6%)</span>
+            <span class="text-slate-300">Crítico: <strong>3</strong> (3.4%)</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-            <span class="text-slate-300">Alto: <strong>22</strong> (41.5%)</span>
+            <span class="text-slate-300">Alto: <strong>37</strong> (42.5%)</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
-            <span class="text-slate-300">Medio: <strong>28</strong> (52.8%)</span>
+            <span class="text-slate-300">Medio: <strong>29</strong> (33.3%)</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-blue-500"></span>
-            <span class="text-slate-300">Bajo: <strong>4</strong> (IaC/Cont)</span>
+            <span class="text-slate-300">Bajo: <strong>18</strong> (20.7%)</span>
           </div>
         </div>
       </div>
@@ -267,7 +261,7 @@
           <canvas id="dimensionsChart"></canvas>
         </div>
         <p class="text-xs text-slate-400 pt-3 border-t border-slate-800">
-          Los 5 pilares fueron analizados. Las mayores vulnerabilidades provienen de dependencias transitivas en el cliente y servidor.
+          Los 5 pilares fueron analizados. Las vulnerabilidades totales (87) incluyen: 53 de Open Source (SCA), 30 de Contenedores Docker y 4 de Infraestructura (IaC).
         </p>
       </div>
 
@@ -279,25 +273,25 @@
         <button onclick="switchTab('deps')" id="tab-deps" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
           <i data-lucide="box" class="w-4 h-4"></i>
           <span>1. Open Source (SCA)</span>
-          <span class="px-2 py-0.5 text-[10px] rounded-full bg-red-500/30 text-red-200">53</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-red-500/30 text-red-200">53 Vulnerabilidades</span>
         </button>
 
         <button onclick="switchTab('licenses')" id="tab-licenses" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
           <i data-lucide="file-check" class="w-4 h-4"></i>
           <span>2. Licencias</span>
-          <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">Cumple</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">0 Riesgos (139 OK)</span>
         </button>
 
         <button onclick="switchTab('code')" id="tab-code" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
           <i data-lucide="code-2" class="w-4 h-4"></i>
           <span>3. Código Fuente (SAST)</span>
-          <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">Limpio / OK</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">0 Vulnerabilidades</span>
         </button>
 
         <button onclick="switchTab('container')" id="tab-container" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
           <i data-lucide="container" class="w-4 h-4"></i>
           <span>4. Contenedores</span>
-          <span class="px-2 py-0.5 text-[10px] rounded-full bg-purple-500/20 text-purple-300">Docker</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-purple-500/20 text-purple-300">30 Vulnerabilidades</span>
         </button>
 
         <button onclick="switchTab('iac')" id="tab-iac" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
@@ -314,21 +308,22 @@
         <div id="content-deps" class="tab-content space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-800">
             <div>
-              <h3 class="text-lg font-bold text-white">Análisis de Dependencias Abiertas (SCA)</h3>
-              <p class="text-xs text-slate-400">Escaneo sobre package.json y package-lock.json en Client y Server.</p>
+              <h3 class="text-lg font-bold text-white">Análisis de Dependencias Abiertas (SCA) - 53 Vulnerabilidades Detectadas</h3>
+              <p class="text-xs text-slate-400">Escaneo integral sobre package.json y package-lock.json en Cliente y Servidor.</p>
             </div>
             
             <!-- Filters -->
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <span class="text-xs text-slate-400">Filtrar:</span>
-              <button onclick="filterVulns('all')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-indigo-600 text-white">Todos</button>
+              <button onclick="filterVulns('all')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-indigo-600 text-white">Todos (53)</button>
               <button onclick="filterVulns('critical')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-slate-800 text-red-400 hover:bg-slate-700">Críticos (3)</button>
               <button onclick="filterVulns('high')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-slate-800 text-amber-400 hover:bg-slate-700">Altos (22)</button>
+              <button onclick="filterVulns('medium')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-slate-800 text-yellow-400 hover:bg-slate-700">Medios (28)</button>
             </div>
           </div>
 
           <!-- Vulnerability Cards List -->
-          <div class="space-y-4">
+          <div class="space-y-4 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar">
             
             <!-- Critical Vulnerability 1 -->
             <div class="vuln-card critical glass-card p-5 rounded-xl border-l-4 border-red-500 hover:border-red-400 transition-all">
@@ -336,25 +331,18 @@
                 <div class="space-y-1">
                   <div class="flex items-center gap-2">
                     <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Critical</span>
-                    <h4 class="text-sm font-bold text-white">Prototype Pollution</h4>
+                    <h4 class="text-sm font-bold text-white">Prototype Pollution in axios</h4>
                     <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-16417750</span>
                   </div>
-                  <p class="text-xs text-slate-300">
-                    Permite a atacantes remotos inyectar o modificar propiedades arbitrarias en objetos globales de JavaScript mediante payload JSON malicioso.
-                  </p>
+                  <p class="text-xs text-slate-300">Permite a atacantes remotos inyectar o modificar propiedades arbitrarias en objetos globales mediante payload JSON malicioso.</p>
                   <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
                     <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
                     <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
                   </div>
                 </div>
                 <div class="flex flex-col items-end gap-2 min-w-[200px]">
-                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
-                    Solución: Actualizar axios a >= 1.7.4
-                  </div>
-                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16417750" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                    <span>Ver Asesoría Snyk</span>
-                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                  </a>
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar axios >= 1.7.4</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16417750" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
                 </div>
               </div>
             </div>
@@ -365,25 +353,40 @@
                 <div class="space-y-1">
                   <div class="flex items-center gap-2">
                     <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Critical</span>
-                    <h4 class="text-sm font-bold text-white">HTTP Response Splitting</h4>
+                    <h4 class="text-sm font-bold text-white">HTTP Response Splitting in axios</h4>
                     <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-16298058</span>
                   </div>
-                  <p class="text-xs text-slate-300">
-                    Posibilita inyección de caracteres de control (CRLF) para secuestrar respuestas HTTP y realizar ataques de secuestro de sesión XSS.
-                  </p>
+                  <p class="text-xs text-slate-300">Posibilita inyección de caracteres de control (CRLF) para secuestrar respuestas HTTP y realizar ataques XSS o hijacking de sesión.</p>
                   <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
                     <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
                     <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
                   </div>
                 </div>
                 <div class="flex flex-col items-end gap-2 min-w-[200px]">
-                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
-                    Solución: Actualizar axios a >= 1.7.4
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar axios >= 1.7.4</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16298058" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Critical Vulnerability 3 -->
+            <div class="vuln-card critical glass-card p-5 rounded-xl border-l-4 border-red-500 hover:border-red-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Critical</span>
+                    <h4 class="text-sm font-bold text-white">Prototype Pollution via Deep Object Assignment</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-16299904</span>
                   </div>
-                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16298058" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                    <span>Ver Asesoría Snyk</span>
-                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                  </a>
+                  <p class="text-xs text-slate-300">Asignación insegura en fusión de objetos permite sobreescritura de metadatos de ejecución en cliente.</p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar axios >= 1.7.4</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16299904" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
                 </div>
               </div>
             </div>
@@ -394,30 +397,23 @@
                 <div class="space-y-1">
                   <div class="flex items-center gap-2">
                     <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">High</span>
-                    <h4 class="text-sm font-bold text-white">Open Redirect</h4>
+                    <h4 class="text-sm font-bold text-white">Open Redirect in react-router-dom</h4>
                     <span class="font-mono text-xs text-slate-400">SNYK-JS-REACTROUTER-18313144</span>
                   </div>
-                  <p class="text-xs text-slate-300">
-                    Manejo inseguro de rutas redirecciona a usuarios hacia dominios maliciosos externos.
-                  </p>
+                  <p class="text-xs text-slate-300">Manejo inseguro de rutas redirecciona a usuarios hacia dominios maliciosos externos.</p>
                   <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
                     <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">react-router-dom@6.30.3</code></span>
                     <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
                   </div>
                 </div>
                 <div class="flex flex-col items-end gap-2 min-w-[200px]">
-                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
-                    Solución: Actualizar react-router-dom a 7.18.0
-                  </div>
-                  <a href="https://security.snyk.io/vuln/SNYK-JS-REACTROUTER-18313144" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                    <span>Ver Asesoría Snyk</span>
-                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                  </a>
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar react-router-dom 7.18.0</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-REACTROUTER-18313144" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
                 </div>
               </div>
             </div>
 
-            <!-- High Vulnerability 2 (Server) -->
+            <!-- High Vulnerability 2 -->
             <div class="vuln-card high glass-card p-5 rounded-xl border-l-4 border-amber-500 hover:border-amber-400 transition-all">
               <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="space-y-1">
@@ -426,22 +422,103 @@
                     <h4 class="text-sm font-bold text-white">Directory Traversal via Tar package</h4>
                     <span class="font-mono text-xs text-slate-400">SNYK-JS-TAR-15307072</span>
                   </div>
-                  <p class="text-xs text-slate-300">
-                    Vulnerabilidad en subdependencia compilada de bcrypt que permite sobreescritura de archivos fuera del directorio de destino.
-                  </p>
+                  <p class="text-xs text-slate-300">Vulnerabilidad en subdependencia compilada de bcrypt que permite sobreescritura de archivos fuera del directorio de destino.</p>
                   <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
                     <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">bcrypt@5.1.1 > tar@6.2.1</code></span>
                     <span>Ubicación: <code class="text-slate-300">server/package.json</code></span>
                   </div>
                 </div>
                 <div class="flex flex-col items-end gap-2 min-w-[200px]">
-                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
-                    Solución: Actualizar bcrypt a 6.0.0
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar bcrypt a 6.0.0</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-TAR-15307072" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- High Vulnerability 3 -->
+            <div class="vuln-card high glass-card p-5 rounded-xl border-l-4 border-amber-500 hover:border-amber-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">High</span>
+                    <h4 class="text-sm font-bold text-white">Server-Side Request Forgery (SSRF) in axios</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-17111062</span>
                   </div>
-                  <a href="https://security.snyk.io/vuln/SNYK-JS-TAR-15307072" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                    <span>Ver Asesoría Snyk</span>
-                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                  </a>
+                  <p class="text-xs text-slate-300">Permite forzar al cliente HTTP a realizar peticiones a recursos de red internos protegidos.</p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar axios >= 1.7.4</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-17111062" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Medium Vulnerability 1 -->
+            <div class="vuln-card medium glass-card p-5 rounded-xl border-l-4 border-yellow-500 hover:border-yellow-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Medium</span>
+                    <h4 class="text-sm font-bold text-white">Unsafe Reflection in react-router</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-REACTROUTER-18313130</span>
+                  </div>
+                  <p class="text-xs text-slate-300">Entrada externa no sanitizada seleccionando clases internas dinámicamente.</p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">react-router-dom@6.30.3</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar react-router-dom 7.18.0</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-REACTROUTER-18313130" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Medium Vulnerability 2 -->
+            <div class="vuln-card medium glass-card p-5 rounded-xl border-l-4 border-yellow-500 hover:border-yellow-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Medium</span>
+                    <h4 class="text-sm font-bold text-white">NULL Pointer Dereference in qs package</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-QS-16721866</span>
+                  </div>
+                  <p class="text-xs text-slate-300">Deserialización insegura en cadenas de consulta (Query Strings) en Express Server.</p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">express@4.22.1 > qs@6.14.2</code></span>
+                    <span>Ubicación: <code class="text-slate-300">server/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar express a 4.22.2</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-QS-16721866" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Medium Vulnerability 3 -->
+            <div class="vuln-card medium glass-card p-5 rounded-xl border-l-4 border-yellow-500 hover:border-yellow-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">Medium</span>
+                    <h4 class="text-sm font-bold text-white">Resource Allocation Limits in body-parser</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-BODYPARSER-17906397</span>
+                  </div>
+                  <p class="text-xs text-slate-300">Falta de límites en procesamiento de cuerpos de petición HTTP que puede causar consumo excesivo de CPU/Memoria.</p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">express@4.22.1 > body-parser@1.20.4</code></span>
+                    <span>Ubicación: <code class="text-slate-300">server/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">Solución: Actualizar express a 4.22.2</div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-BODYPARSER-17906397" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"><span>Ver Asesoría Snyk</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
                 </div>
               </div>
             </div>
@@ -452,7 +529,7 @@
         <!-- Tab 2: Licencias -->
         <div id="content-licenses" class="tab-content hidden space-y-6">
           <div class="pb-4 border-b border-slate-800">
-            <h3 class="text-lg font-bold text-white">Auditoría de Licencias Open Source</h3>
+            <h3 class="text-lg font-bold text-white">Auditoría de Licencias Open Source - 139 Paquetes Verificados</h3>
             <p class="text-xs text-slate-400">Verificación de licencias permisivas (MIT, Apache, ISC) vs licencias restrictivas (GPL, AGPL).</p>
           </div>
 
@@ -500,7 +577,7 @@
           <div class="glass-card p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/20 flex items-center gap-3">
             <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
             <span class="text-xs text-emerald-200">
-              <strong>Cumplimiento exitoso:</strong> No se detectaron licencias AGPL ni Copyleft Fuerte que pongan en riesgo la propiedad intelectual del proyecto.
+              <strong>Cumplimiento exitoso:</strong> 0 Riesgos de Licencia. No se detectaron licencias AGPL ni Copyleft Fuerte.
             </span>
           </div>
         </div>
@@ -508,7 +585,7 @@
         <!-- Tab 3: Snyk Code SAST -->
         <div id="content-code" class="tab-content hidden space-y-6">
           <div class="pb-4 border-b border-slate-800">
-            <h3 class="text-lg font-bold text-white">Análisis Estático de Código Fuente (Snyk Code / SAST)</h3>
+            <h3 class="text-lg font-bold text-white">Análisis Estático de Código Fuente (Snyk Code / SAST) - 0 Vulnerabilidades</h3>
             <p class="text-xs text-slate-400">Auditoría automática sobre archivos TypeScript, React JSX y scripts backend.</p>
           </div>
 
@@ -543,7 +620,7 @@
         <!-- Tab 4: Contenedores -->
         <div id="content-container" class="tab-content hidden space-y-6">
           <div class="pb-4 border-b border-slate-800">
-            <h3 class="text-lg font-bold text-white">Análisis de Seguridad en Contenedores (Snyk Container)</h3>
+            <h3 class="text-lg font-bold text-white">Análisis de Seguridad en Contenedores (Snyk Container) - 30 Vulnerabilidades</h3>
             <p class="text-xs text-slate-400">Escaneo de imágenes base y capas de Dockerfile para cliente y servidor.</p>
           </div>
 
@@ -591,50 +668,32 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">cross-spawn @ 7.0.3</span>
-                  <p class="text-slate-400 text-[11px]">ReDoS Vulnerability (SNYK-JS-CROSSSPAWN-8303230)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">cross-spawn @ 7.0.3</span><p class="text-slate-400 text-[11px]">ReDoS Vulnerability (SNYK-JS-CROSSSPAWN-8303230)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
 
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">glob @ 10.4.2</span>
-                  <p class="text-slate-400 text-[11px]">Command Injection (SNYK-JS-GLOB-14040952)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">glob @ 10.4.2</span><p class="text-slate-400 text-[11px]">Command Injection (SNYK-JS-GLOB-14040952)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
 
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">minimatch @ 9.0.5</span>
-                  <p class="text-slate-400 text-[11px]">ReDoS & Algorithmic Complexity (SNYK-JS-MINIMATCH-15309438)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">minimatch @ 9.0.5</span><p class="text-slate-400 text-[11px]">ReDoS & Algorithmic Complexity (SNYK-JS-MINIMATCH-15309438)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
 
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">tar @ 6.2.1</span>
-                  <p class="text-slate-400 text-[11px]">Directory Traversal & Symlink Attack (SNYK-JS-TAR-15307072)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">tar @ 6.2.1</span><p class="text-slate-400 text-[11px]">Directory Traversal & Symlink Attack (SNYK-JS-TAR-15307072)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
 
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">pacote @ 18.0.6</span>
-                  <p class="text-slate-400 text-[11px]">Denial of Service DoS (SNYK-JS-PACOTE-8225084)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">pacote @ 18.0.6</span><p class="text-slate-400 text-[11px]">Denial of Service DoS (SNYK-JS-PACOTE-8225084)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
 
               <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between">
-                <div>
-                  <span class="font-bold text-white font-mono">brace-expansion @ 2.0.1</span>
-                  <p class="text-slate-400 text-[11px]">Infinite Loop & ReDoS (SNYK-JS-BRACEEXPANSION-15789759)</p>
-                </div>
+                <div><span class="font-bold text-white font-mono">brace-expansion @ 2.0.1</span><p class="text-slate-400 text-[11px]">Infinite Loop & ReDoS (SNYK-JS-BRACEEXPANSION-15789759)</p></div>
                 <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400">HIGH</span>
               </div>
             </div>
@@ -648,7 +707,7 @@
         <!-- Tab 5: Infraestructura como Código -->
         <div id="content-iac" class="tab-content hidden space-y-6">
           <div class="pb-4 border-b border-slate-800">
-            <h3 class="text-lg font-bold text-white">Seguridad en Infraestructura como Código (Snyk IaC)</h3>
+            <h3 class="text-lg font-bold text-white">Seguridad en Infraestructura como Código (Snyk IaC) - 4 Hallazgos</h3>
             <p class="text-xs text-slate-400">Análisis de malas configuraciones en manifestos Kubernetes (<code class="text-slate-300">k8s/deployment.yaml</code>) y Docker Compose.</p>
           </div>
 
@@ -738,14 +797,14 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Chart 1: Donut Severity
+    // Chart 1: Donut Severity (Total 87)
     const ctxSeverity = document.getElementById('severityChart').getContext('2d');
     new Chart(ctxSeverity, {
       type: 'doughnut',
       data: {
         labels: ['Crítico', 'Alto', 'Medio', 'Bajo'],
         datasets: [{
-          data: [3, 22, 28, 4],
+          data: [3, 37, 29, 18],
           backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6'],
           borderWidth: 0,
           hoverOffset: 6
