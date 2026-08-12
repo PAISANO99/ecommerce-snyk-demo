@@ -14,5 +14,9 @@
     "snyk:report": "npx snyk test --all-projects --json | npx snyk-to-html -o snyk-report.html",
     "snyk:dashboard": "Start-Process snyk-dashboard.html",
     "snyk:all": "npm run snyk:deps && npm run snyk:licenses && npm run snyk:code && npm run snyk:iac"
+  },
+  "devDependencies": {
+    "snyk": "^1.1306.3",
+    "snyk-to-html": "^3.7.9"
   }
 }
