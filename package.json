@@ -1,0 +1,17 @@
+{
+  "name": "ecommerce-vibe-pulse-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "snyk:deps": "npx snyk test --all-projects",
+    "snyk:licenses": "npx snyk test --all-projects --licenses",
+    "snyk:code": "npx snyk code test",
+    "snyk:container:server": "npx snyk container test node:20-alpine --file=server/Dockerfile",
+    "snyk:container:client": "npx snyk container test nginx:1.25-alpine --file=client/Dockerfile",
+    "snyk:iac": "npx snyk iac test k8s/ docker-compose.yml",
+    "snyk:monitor": "npx snyk monitor --all-projects",
+    "snyk:report": "npx snyk test --all-projects --json | npx snyk-to-html -o snyk-report.html",
+    "snyk:dashboard": "Start-Process snyk-dashboard.html",
+    "snyk:all": "npm run snyk:deps && npm run snyk:licenses && npm run snyk:code && npm run snyk:iac"
+  }
+}

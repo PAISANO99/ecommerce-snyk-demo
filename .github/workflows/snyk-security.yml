@@ -1,0 +1,63 @@
+name: Snyk Security Suite Scan
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  snyk-security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      # 1. Snyk Open Source Dependencies Scan (SCA)
+      - name: Snyk Open Source Dependencies Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk test --all-projects
+        continue-on-error: true
+
+      # 2. Snyk Licenses Compliance Scan
+      - name: Snyk Licenses Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk test --all-projects --licenses
+        continue-on-error: true
+
+      # 3. Snyk Code (SAST Scan)
+      - name: Snyk Code SAST Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk code test
+        continue-on-error: true
+
+      # 4. Snyk Container Scan
+      - name: Snyk Container Scan (Server Dockerfile)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk container test node:20-alpine --file=server/Dockerfile
+        continue-on-error: true
+
+      - name: Snyk Container Scan (Client Dockerfile)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk container test nginx:1.25-alpine --file=client/Dockerfile
+        continue-on-error: true
+
+      # 5. Snyk Infrastructure as Code (IaC Scan)
+      - name: Snyk Infrastructure as Code Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk iac test k8s/ docker-compose.yml
+        continue-on-error: true

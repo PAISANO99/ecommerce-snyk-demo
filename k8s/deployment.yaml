@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-server-deployment
+  labels:
+    app: ecommerce-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce-server
+  template:
+    metadata:
+      labels:
+        app: ecommerce-server
+    spec:
+      containers:
+      - name: ecommerce-server
+        image: node:20-alpine
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 10001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce-server-service
+spec:
+  type: ClusterIP
+  selector:
+    app: ecommerce-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

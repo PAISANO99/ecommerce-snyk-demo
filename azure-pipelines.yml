@@ -18,6 +18,57 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
+  - stage: SnykSecurityScan
+    displayName: 'Snyk Security Suite (SCA, Code, Container & IaC)'
+    jobs:
+      - job: SnykScanJob
+        displayName: 'Snyk Full Security Scan'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js 20.x'
+
+          - script: |
+              npm install -g snyk
+            displayName: 'Install Snyk CLI'
+
+          - script: |
+              snyk test --all-projects
+            displayName: 'Snyk Open Source (Dependencies) Scan'
+            env:
+              SNYK_TOKEN: $(SNYK_TOKEN)
+            continueOnError: true
+
+          - script: |
+              snyk test --all-projects --licenses
+            displayName: 'Snyk Licenses Scan'
+            env:
+              SNYK_TOKEN: $(SNYK_TOKEN)
+            continueOnError: true
+
+          - script: |
+              snyk code test
+            displayName: 'Snyk Code (SAST) Scan'
+            env:
+              SNYK_TOKEN: $(SNYK_TOKEN)
+            continueOnError: true
+
+          - script: |
+              snyk container test node:20-alpine --file=server/Dockerfile
+              snyk container test nginx:1.25-alpine --file=client/Dockerfile
+            displayName: 'Snyk Container Scan'
+            env:
+              SNYK_TOKEN: $(SNYK_TOKEN)
+            continueOnError: true
+
+          - script: |
+              snyk iac test k8s/ docker-compose.yml
+            displayName: 'Snyk Infrastructure as Code (IaC) Scan'
+            env:
+              SNYK_TOKEN: $(SNYK_TOKEN)
+            continueOnError: true
+
   - stage: BuildAndTest
     displayName: 'Build, Quality & Performance Stage'
     jobs:

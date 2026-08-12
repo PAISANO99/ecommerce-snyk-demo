@@ -13,7 +13,11 @@
     "test:coverage": "vitest run --coverage",
     "test:component": "cypress run --component",
     "test:component:open": "cypress open --component",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "snyk:deps": "npx snyk test",
+    "snyk:licenses": "npx snyk test --licenses",
+    "snyk:code": "npx snyk code test",
+    "snyk:container": "npx snyk container test nginx:1.25-alpine --file=Dockerfile"
   },
   "dependencies": {
     "axios": "^1.15.0",

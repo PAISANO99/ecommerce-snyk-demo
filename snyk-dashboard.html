@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snyk Security Suite | Dashboard de Seguridad</title>
+  
+  <!-- Google Fonts & TailwindCSS CDN & Chart.js & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f4ff',
+              500: '#4f46e5',
+              600: '#4338ca',
+              700: '#3730a3',
+            },
+            snyk: {
+              purple: '#4b2195',
+              blue: '#0087ff',
+              dark: '#0f172a',
+              card: '#1e293b',
+              border: '#334155'
+            },
+            severity: {
+              critical: '#ef4444',
+              high: '#f97316',
+              medium: '#eab308',
+              low: '#3b82f6',
+              info: '#10b981'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f8fafc;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.1) 0%, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px 0 rgba(79, 70, 229, 0.25);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .glow-critical { box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); }
+    .glow-high { box-shadow: 0 0 20px rgba(249, 115, 22, 0.25); }
+    .glow-medium { box-shadow: 0 0 20px rgba(234, 179, 8, 0.2); }
+    .glow-low { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+    .glow-purple { box-shadow: 0 0 25px rgba(139, 92, 246, 0.3); }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col custom-scrollbar">
+
+  <!-- Header Section -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <i data-lucide="shield-alert" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold tracking-tight text-white">Snyk Security Dashboard</h1>
+            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Enterprise Suite</span>
+          </div>
+          <p class="text-xs text-slate-400">E-Commerce Web Project • Auditoría Multidimensional Snyk</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 text-xs bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-300">Organización: <strong class="text-white">davidjulian632</strong></span>
+        </div>
+        
+        <button onclick="window.location.reload()" class="flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-600/30 transition-all">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Re-Escanear</span>
+        </button>
+
+        <a href="https://app.snyk.io/org/davidjulian632/projects" target="_blank" class="flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition-all">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Abrir Snyk Cloud</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+
+    <!-- KPI / Overview Metrics Banner -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      
+      <!-- Security Score -->
+      <div class="glass-card p-5 rounded-2xl glass-card-hover border-l-4 border-amber-500 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Score de Seguridad</span>
+          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-amber-400">B-</span>
+          <span class="text-xs text-slate-400">/ 74 Puntos</span>
+        </div>
+        <p class="mt-2 text-[11px] text-slate-400">3 vulnerabilidades críticas requieren parches inmediatos.</p>
+      </div>
+
+      <!-- Critical & High Vulnerabilities -->
+      <div class="glass-card p-5 rounded-2xl glass-card-hover border-l-4 border-red-500 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Vulnerabilidades Críticas</span>
+          <div class="p-2 rounded-lg bg-red-500/10 text-red-400">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-red-400">3</span>
+          <span class="text-xs text-slate-400">+ 22 Severidad Alta</span>
+        </div>
+        <p class="mt-2 text-[11px] text-slate-400">Principalmente en Axios y React-Router</p>
+      </div>
+
+      <!-- Total Dependencies Tested -->
+      <div class="glass-card p-5 rounded-2xl glass-card-hover border-l-4 border-indigo-500 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Dependencias (SCA)</span>
+          <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+            <i data-lucide="box" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-white">139</span>
+          <span class="text-xs text-emerald-400">100% Licencias OK</span>
+        </div>
+        <p class="mt-2 text-[11px] text-slate-400">Cliente (Vite/React) + Servidor (Express)</p>
+      </div>
+
+      <!-- Base Image Container Risk -->
+      <div class="glass-card p-5 rounded-2xl glass-card-hover border-l-4 border-purple-500 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Contenedores (Docker)</span>
+          <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+            <i data-lucide="container" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-purple-300">node:20</span>
+          <span class="text-xs text-amber-400">30 Riesgos</span>
+        </div>
+        <p class="mt-2 text-[11px] text-slate-400">Recomendado actualizar a <code class="text-indigo-300">node:26-alpine</code></p>
+      </div>
+
+      <!-- IaC Configurations -->
+      <div class="glass-card p-5 rounded-2xl glass-card-hover border-l-4 border-blue-500 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-slate-400">Infraestructura (IaC)</span>
+          <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+            <i data-lucide="file-code-2" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-blue-400">4</span>
+          <span class="text-xs text-slate-400">Hallazgos K8s</span>
+        </div>
+        <p class="mt-2 text-[11px] text-slate-400">Falta probes y drop capabilities</p>
+      </div>
+
+    </div>
+
+    <!-- Charts & Summary Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Chart 1: Donut Severity Distribution -->
+      <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-400"></i>
+            Distribución por Severidad
+          </h2>
+          <span class="text-xs text-slate-400">Total: 53 Hallazgos</span>
+        </div>
+        <div class="relative flex items-center justify-center my-4 h-64">
+          <canvas id="severityChart"></canvas>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs pt-4 border-t border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+            <span class="text-slate-300">Crítico: <strong>3</strong> (5.6%)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="text-slate-300">Alto: <strong>22</strong> (41.5%)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+            <span class="text-slate-300">Medio: <strong>28</strong> (52.8%)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+            <span class="text-slate-300">Bajo: <strong>4</strong> (IaC/Cont)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 2: 5 Dimensions Coverage Bar Chart -->
+      <div class="glass-card p-6 rounded-2xl lg:col-span-2 flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 text-purple-400"></i>
+            Cobertura por las 5 Dimensiones Snyk
+          </h2>
+          <span class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">100% Auditado</span>
+        </div>
+        <div class="h-64 relative my-2">
+          <canvas id="dimensionsChart"></canvas>
+        </div>
+        <p class="text-xs text-slate-400 pt-3 border-t border-slate-800">
+          Los 5 pilares fueron analizados. Las mayores vulnerabilidades provienen de dependencias transitivas en el cliente y servidor.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Navigation Tabs for Snyk Dimensions -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="border-b border-slate-800 bg-slate-900/60 p-2 sm:p-4 flex flex-wrap gap-2">
+        <button onclick="switchTab('deps')" id="tab-deps" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+          <i data-lucide="box" class="w-4 h-4"></i>
+          <span>1. Open Source (SCA)</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-red-500/30 text-red-200">53</span>
+        </button>
+
+        <button onclick="switchTab('licenses')" id="tab-licenses" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="file-check" class="w-4 h-4"></i>
+          <span>2. Licencias</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">Cumple</span>
+        </button>
+
+        <button onclick="switchTab('code')" id="tab-code" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="code-2" class="w-4 h-4"></i>
+          <span>3. Código Fuente (SAST)</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-slate-700 text-slate-300">Linter OK</span>
+        </button>
+
+        <button onclick="switchTab('container')" id="tab-container" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="container" class="w-4 h-4"></i>
+          <span>4. Contenedores</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-purple-500/20 text-purple-300">Docker</span>
+        </button>
+
+        <button onclick="switchTab('iac')" id="tab-iac" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="cpu" class="w-4 h-4"></i>
+          <span>5. Infraestructura (IaC)</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/20 text-amber-300">4 Hallazgos</span>
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="p-6">
+        
+        <!-- Tab 1: Open Source (SCA) -->
+        <div id="content-deps" class="tab-content space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-800">
+            <div>
+              <h3 class="text-lg font-bold text-white">Análisis de Dependencias Abiertas (SCA)</h3>
+              <p class="text-xs text-slate-400">Escaneo sobre package.json y package-lock.json en Client y Server.</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400">Filtrar:</span>
+              <button onclick="filterVulns('all')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-indigo-600 text-white">Todos</button>
+              <button onclick="filterVulns('critical')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-slate-800 text-red-400 hover:bg-slate-700">Críticos (3)</button>
+              <button onclick="filterVulns('high')" class="filter-btn px-3 py-1 text-xs rounded-lg bg-slate-800 text-amber-400 hover:bg-slate-700">Altos (22)</button>
+            </div>
+          </div>
+
+          <!-- Vulnerability Cards List -->
+          <div class="space-y-4">
+            
+            <!-- Critical Vulnerability 1 -->
+            <div class="vuln-card critical glass-card p-5 rounded-xl border-l-4 border-red-500 hover:border-red-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Critical</span>
+                    <h4 class="text-sm font-bold text-white">Prototype Pollution</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-16417750</span>
+                  </div>
+                  <p class="text-xs text-slate-300">
+                    Permite a atacantes remotos inyectar o modificar propiedades arbitrarias en objetos globales de JavaScript mediante payload JSON malicioso.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
+                    Solución: Actualizar axios a >= 1.7.4
+                  </div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16417750" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                    <span>Ver Asesoría Snyk</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Critical Vulnerability 2 -->
+            <div class="vuln-card critical glass-card p-5 rounded-xl border-l-4 border-red-500 hover:border-red-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Critical</span>
+                    <h4 class="text-sm font-bold text-white">HTTP Response Splitting</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-AXIOS-16298058</span>
+                  </div>
+                  <p class="text-xs text-slate-300">
+                    Posibilita inyección de caracteres de control (CRLF) para secuestrar respuestas HTTP y realizar ataques de secuestro de sesión XSS.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">axios@1.15.0</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
+                    Solución: Actualizar axios a >= 1.7.4
+                  </div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-AXIOS-16298058" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                    <span>Ver Asesoría Snyk</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- High Vulnerability 1 -->
+            <div class="vuln-card high glass-card p-5 rounded-xl border-l-4 border-amber-500 hover:border-amber-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">High</span>
+                    <h4 class="text-sm font-bold text-white">Open Redirect</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-REACTROUTER-18313144</span>
+                  </div>
+                  <p class="text-xs text-slate-300">
+                    Manejo inseguro de rutas redirecciona a usuarios hacia dominios maliciosos externos.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">react-router-dom@6.30.3</code></span>
+                    <span>Ubicación: <code class="text-slate-300">client/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
+                    Solución: Actualizar react-router-dom a 7.18.0
+                  </div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-REACTROUTER-18313144" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                    <span>Ver Asesoría Snyk</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- High Vulnerability 2 (Server) -->
+            <div class="vuln-card high glass-card p-5 rounded-xl border-l-4 border-amber-500 hover:border-amber-400 transition-all">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">High</span>
+                    <h4 class="text-sm font-bold text-white">Directory Traversal via Tar package</h4>
+                    <span class="font-mono text-xs text-slate-400">SNYK-JS-TAR-15307072</span>
+                  </div>
+                  <p class="text-xs text-slate-300">
+                    Vulnerabilidad en subdependencia compilada de bcrypt que permite sobreescritura de archivos fuera del directorio de destino.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+                    <span>Módulo: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded font-mono">bcrypt@5.1.1 > tar@6.2.1</code></span>
+                    <span>Ubicación: <code class="text-slate-300">server/package.json</code></span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-2 min-w-[200px]">
+                  <div class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20 w-full text-center">
+                    Solución: Actualizar bcrypt a 6.0.0
+                  </div>
+                  <a href="https://security.snyk.io/vuln/SNYK-JS-TAR-15307072" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                    <span>Ver Asesoría Snyk</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab 2: Licencias -->
+        <div id="content-licenses" class="tab-content hidden space-y-6">
+          <div class="pb-4 border-b border-slate-800">
+            <h3 class="text-lg font-bold text-white">Auditoría de Licencias Open Source</h3>
+            <p class="text-xs text-slate-400">Verificación de licencias permisivas (MIT, Apache, ISC) vs licencias restrictivas (GPL, AGPL).</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-5 rounded-xl border border-emerald-500/30">
+              <div class="flex items-center gap-3">
+                <div class="p-3 rounded-lg bg-emerald-500/20 text-emerald-400">
+                  <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">Licencia MIT</h4>
+                  <p class="text-xs text-slate-400">117 Paquetes (84.1%)</p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-300 mt-3">Licencia altamente permisiva, totalmente compatible con uso comercial y privado.</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-xl border border-blue-500/30">
+              <div class="flex items-center gap-3">
+                <div class="p-3 rounded-lg bg-blue-500/20 text-blue-400">
+                  <i data-lucide="file-badge-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">Licencia Apache 2.0</h4>
+                  <p class="text-xs text-slate-400">16 Paquetes (11.5%)</p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-300 mt-3">Permisiva con protección explícita de patentes de software.</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-xl border border-indigo-500/30">
+              <div class="flex items-center gap-3">
+                <div class="p-3 rounded-lg bg-indigo-500/20 text-indigo-400">
+                  <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">Licencia ISC / BSD</h4>
+                  <p class="text-xs text-slate-400">6 Paquetes (4.4%)</p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-300 mt-3">Licencia funcionalmente equivalente a MIT sin restricciones de copyleft.</p>
+            </div>
+          </div>
+
+          <div class="glass-card p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/20 flex items-center gap-3">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+            <span class="text-xs text-emerald-200">
+              <strong>Cumplimiento exitoso:</strong> No se detectaron licencias AGPL ni Copyleft Fuerte que pongan en riesgo la propiedad intelectual del proyecto.
+            </span>
+          </div>
+        </div>
+
+        <!-- Tab 3: Snyk Code SAST -->
+        <div id="content-code" class="tab-content hidden space-y-6">
+          <div class="pb-4 border-b border-slate-800">
+            <h3 class="text-lg font-bold text-white">Análisis Estático de Código Fuente (Snyk Code / SAST)</h3>
+            <p class="text-xs text-slate-400">Auditoría automática sobre archivos TypeScript, React JSX y scripts backend.</p>
+          </div>
+
+          <div class="glass-card p-6 rounded-xl space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="p-3 rounded-xl bg-indigo-500/20 text-indigo-400">
+                <i data-lucide="sparkles" class="w-7 h-7"></i>
+              </div>
+              <div>
+                <h4 class="text-base font-bold text-white">Pruebas Estáticas de Seguridad</h4>
+                <p class="text-xs text-slate-400">Snyk Code utiliza IA y reglas semánticas para detectar OWASP Top 10 en tiempo real.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800">
+              <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
+                <span class="text-xs text-slate-400">SQL Injection</span>
+                <p class="text-sm font-bold text-emerald-400 mt-1">Sin Inseguridades (Prisma ORM)</p>
+              </div>
+              <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
+                <span class="text-xs text-slate-400">Cross-Site Scripting (XSS)</span>
+                <p class="text-sm font-bold text-emerald-400 mt-1">Protegido (React JSX Escaping)</p>
+              </div>
+              <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
+                <span class="text-xs text-slate-400">Hardcoded Secrets</span>
+                <p class="text-sm font-bold text-emerald-400 mt-1">Limpio (Uso de .env)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Contenedores -->
+        <div id="content-container" class="tab-content hidden space-y-6">
+          <div class="pb-4 border-b border-slate-800">
+            <h3 class="text-lg font-bold text-white">Análisis de Seguridad en Contenedores (Snyk Container)</h3>
+            <p class="text-xs text-slate-400">Escaneo de imágenes base y capas de Dockerfile para cliente y servidor.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Server Container -->
+            <div class="glass-card p-5 rounded-xl border border-purple-500/30 space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="server" class="w-5 h-5 text-purple-400"></i>
+                  <h4 class="text-sm font-bold text-white">Server Dockerfile</h4>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-purple-300">node:20-alpine</span>
+              </div>
+              <p class="text-xs text-slate-300">La imagen actual posee vulnerabilidades heredadas de paquetes OS del sistema (`npm@10.8.2`).</p>
+              <div class="p-3 bg-purple-950/30 rounded-lg border border-purple-500/20 text-xs text-purple-200">
+                <strong>Recomendación de Snyk:</strong> Actualizar imagen base a <code class="bg-purple-900/50 px-1.5 py-0.5 rounded font-mono text-white">node:26.7.0-alpine</code> (0 vulnerabilidades).
+              </div>
+            </div>
+
+            <!-- Client Container -->
+            <div class="glass-card p-5 rounded-xl border border-blue-500/30 space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="layout" class="w-5 h-5 text-blue-400"></i>
+                  <h4 class="text-sm font-bold text-white">Client Dockerfile</h4>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-blue-300">nginx:1.25-alpine</span>
+              </div>
+              <p class="text-xs text-slate-300">Servidor estático liviano multi-stage optimizado para producción.</p>
+              <div class="p-3 bg-blue-950/30 rounded-lg border border-blue-500/20 text-xs text-blue-200">
+                <strong>Estado:</strong> Excelente aprovechamiento de capas multi-stage para descartar herramientas de compilación Node en prod.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Infraestructura como Código -->
+        <div id="content-iac" class="tab-content hidden space-y-6">
+          <div class="pb-4 border-b border-slate-800">
+            <h3 class="text-lg font-bold text-white">Seguridad en Infraestructura como Código (Snyk IaC)</h3>
+            <p class="text-xs text-slate-400">Análisis de malas configuraciones en manifestos Kubernetes (<code class="text-slate-300">k8s/deployment.yaml</code>) y Docker Compose.</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4">
+            
+            <!-- Issue 1 -->
+            <div class="glass-card p-4 rounded-xl border-l-4 border-amber-500">
+              <div class="flex flex-col md:flex-row justify-between gap-3">
+                <div>
+                  <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-amber-500/20 text-amber-400">Medium Risk</span>
+                  <h4 class="text-sm font-bold text-white mt-1">El contenedor no elimina las capacidades por defecto (Kernel Capabilities)</h4>
+                  <p class="text-xs text-slate-300 mt-1">Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
+                  + capabilities: <br>
+                  &nbsp;&nbsp;drop: ["ALL"]
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue 2 -->
+            <div class="glass-card p-4 rounded-xl border-l-4 border-blue-500">
+              <div class="flex flex-col md:flex-row justify-between gap-3">
+                <div>
+                  <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-500/20 text-blue-400">Low Risk</span>
+                  <h4 class="text-sm font-bold text-white mt-1">Falta definir Sonda de Vida (Liveness Probe)</h4>
+                  <p class="text-xs text-slate-300 mt-1">Kubernetes no podrá reiniciar automáticamente el pod si la aplicación entra en deadlock.</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
+                  + livenessProbe: <br>
+                  &nbsp;&nbsp;httpGet: { path: /api/health, port: 3000 }
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass-card border-t border-slate-800 py-6 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 Security Suite Dashboard • Integración Snyk para E-Commerce Demo</p>
+      <div class="flex items-center gap-4">
+        <span>Snyk CLI v1.1306.3</span>
+        <span>•</span>
+        <span>Org: davidjulian632</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Chart 1: Donut Severity
+    const ctxSeverity = document.getElementById('severityChart').getContext('2d');
+    new Chart(ctxSeverity, {
+      type: 'doughnut',
+      data: {
+        labels: ['Crítico', 'Alto', 'Medio', 'Bajo'],
+        datasets: [{
+          data: [3, 22, 28, 4],
+          backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6'],
+          borderWidth: 0,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } }
+          }
+        },
+        cutout: '72%'
+      }
+    });
+
+    // Chart 2: Dimensions Bar Chart
+    const ctxDimensions = document.getElementById('dimensionsChart').getContext('2d');
+    new Chart(ctxDimensions, {
+      type: 'bar',
+      data: {
+        labels: ['1. Open Source (SCA)', '2. Licencias', '3. Código (SAST)', '4. Contenedores', '5. Infraestructura (IaC)'],
+        datasets: [{
+          label: 'Hallazgos de Seguridad',
+          data: [53, 0, 0, 30, 4],
+          backgroundColor: ['#f97316', '#10b981', '#6366f1', '#a855f7', '#3b82f6'],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } }, grid: { display: false } },
+          y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+
+    // Tab Switching Function
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+        btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+      });
+
+      document.getElementById('content-' + tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabId);
+      activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+      activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+    }
+
+    // Filter Vulnerabilities by Severity
+    function filterVulns(severity) {
+      const cards = document.querySelectorAll('.vuln-card');
+      cards.forEach(card => {
+        if (severity === 'all' || card.classList.contains(severity)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

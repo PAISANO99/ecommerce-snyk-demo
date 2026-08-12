@@ -12,7 +12,11 @@
     "test:load": "vitest run tests/load/health.load.test.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "snyk:deps": "npx snyk test",
+    "snyk:licenses": "npx snyk test --licenses",
+    "snyk:code": "npx snyk code test",
+    "snyk:container": "npx snyk container test node:20-alpine --file=Dockerfile"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

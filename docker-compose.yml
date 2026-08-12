@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: ecommerce-db
+    environment:
+      POSTGRES_USER: ecommerce_user
+      POSTGRES_PASSWORD: ecommerce_password
+      POSTGRES_DB: ecommerce_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ecommerce-server
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://ecommerce_user:ecommerce_password@database:5432/ecommerce_db?schema=public
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: ecommerce-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+
+volumes:
+  pgdata:
