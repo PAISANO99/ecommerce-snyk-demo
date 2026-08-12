@@ -595,7 +595,7 @@
                 <div>
                   <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-amber-500/20 text-amber-400">Medium Risk</span>
                   <h4 class="text-sm font-bold text-white mt-1">El contenedor no elimina las capacidades por defecto (Kernel Capabilities)</h4>
-                  <p class="text-xs text-slate-300 mt-1">Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
+                  <p class="text-xs text-slate-300 mt-1">Regla: <code class="text-indigo-300 font-mono">SNYK-CC-K8S-6</code> | Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
                 </div>
                 <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
                   + capabilities: <br>
@@ -610,11 +610,40 @@
                 <div>
                   <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-500/20 text-blue-400">Low Risk</span>
                   <h4 class="text-sm font-bold text-white mt-1">Falta definir Sonda de Vida (Liveness Probe)</h4>
-                  <p class="text-xs text-slate-300 mt-1">Kubernetes no podrá reiniciar automáticamente el pod si la aplicación entra en deadlock.</p>
+                  <p class="text-xs text-slate-300 mt-1">Regla: <code class="text-indigo-300 font-mono">SNYK-CC-K8S-41</code> | Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
                 </div>
                 <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
                   + livenessProbe: <br>
                   &nbsp;&nbsp;httpGet: { path: /api/health, port: 3000 }
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue 3 -->
+            <div class="glass-card p-4 rounded-xl border-l-4 border-blue-500">
+              <div class="flex flex-col md:flex-row justify-between gap-3">
+                <div>
+                  <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-500/20 text-blue-400">Low Risk</span>
+                  <h4 class="text-sm font-bold text-white mt-1">Política de descarga de imagen no establecida en Always (imagePullPolicy)</h4>
+                  <p class="text-xs text-slate-300 mt-1">Regla: <code class="text-indigo-300 font-mono">SNYK-CC-K8S-42</code> | Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
+                  + imagePullPolicy: Always
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue 4 -->
+            <div class="glass-card p-4 rounded-xl border-l-4 border-blue-500">
+              <div class="flex flex-col md:flex-row justify-between gap-3">
+                <div>
+                  <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-500/20 text-blue-400">Low Risk</span>
+                  <h4 class="text-sm font-bold text-white mt-1">Sistema de archivos de contenedor en modo lectura/escritura</h4>
+                  <p class="text-xs text-slate-300 mt-1">Regla: <code class="text-indigo-300 font-mono">SNYK-CC-K8S-8</code> | Archivo: <code class="text-indigo-300 font-mono">k8s/deployment.yaml</code></p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400 self-start">
+                  + securityContext: <br>
+                  &nbsp;&nbsp;readOnlyRootFilesystem: true
                 </div>
               </div>
             </div>
